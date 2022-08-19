@@ -1,27 +1,25 @@
-const api_url = (after, before) => `https://api.pushshift.io/reddit/submission/search/?subreddit=wallstreetbets&after=${after}&before=${before}&size=500`;
+const api_url = (after, before) => `https://api.pushshift.io/reddit/submission/search/?subreddit=wallstreetbets&after=${after}&before=${before}&size=250`;
 
-async function getApi(url) {
+let tickers_ranking = new Map();
+
+let after = 1660867200;
+let before = 1660953600;
+
+getApiData(api_url(after, before));
+
+async function getApiData(url) {
 
     const response = await fetch(url);
 
     var data = await response.json();
-    console.log(data);
-    if (response) {
-        hideLoader();
+    rankTickers(data);
+    if (data.data.length === 250) {
+        getApiData(api_url(data.data.slice(-1)[0].created_utc + 1, before));
     }
-    tickers = getTickers(data);
-    show(tickers);
 }
 
-getApi(api_url("2022-08-19", "2022-08-20"));
-
-function hideLoader() {
-    document.getElementById('loader').style.display = 'none';
-}
-
-function getTickers(data) {
+function rankTickers(data) {
     ticker_regex = "\\b[A-Z]{1,5}\\b";
-    let tickers_ranking = new Map();
     for (let r of data.data) {
         let content = r.title + " " + r.selftext;
         let tickers = new Set(content.match(ticker_regex));
@@ -33,7 +31,11 @@ function getTickers(data) {
             }
         }
     }
-    return tickers_ranking;
+    show(tickers_ranking);
+}
+
+function hideLoader() {
+    document.getElementById('loader').style.display = 'none';
 }
 
 function show(tickers) {
