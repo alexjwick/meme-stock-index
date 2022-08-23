@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "google-finance": "^0.1.12"
+  }
+}
