@@ -1,6 +1,6 @@
 const api_url = (after, before) => `https://api.pushshift.io/reddit/submission/search/?subreddit=wallstreetbets&after=${after}&before=${before}&size=250`;
 
-const tickers_blacklist = ["WSB", "HODL", "APES", "BUY", "YOLO", "FUD", "YOU", "THE", "NOT", "HOLD", "APE", "ALL", "TLDR", "LFG", "SEC", "FUCK", "MSM", "FOMO", "BABY", "HALT", "STFU", "IRA", "SELL", "WISH", "FROM", "BLUE", "AND", "ARE", "USD", "FOR", "WTF", "WHAT", "PSA", "CEO"];
+const tickers_blacklist = ["WSB", "HODL", "APES", "BUY", "YOLO", "FUD", "YOU", "THE", "NOT", "HOLD", "APE", "ALL", "TLDR", "LFG", "SEC", "FUCK", "MSM", "FOMO", "BABY", "HALT", "STFU", "IRA", "SELL", "WISH", "FROM", "BLUE", "AND", "ARE", "USD", "FOR", "WTF", "WHAT", "PSA", "CEO", "CNBC", "EOW"];
 
 let tickers_mentions = new Map();
 let tickers_mentions_prev = new Map();
