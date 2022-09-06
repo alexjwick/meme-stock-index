@@ -1,6 +1,6 @@
 const api_url = (after, before) => `https://api.pushshift.io/reddit/submission/search/?subreddit=wallstreetbets&after=${after}&before=${before}&size=250`;
 
-const tickers_blacklist = ["WSB", "HODL", "APES", "BUY", "YOLO", "FUD", "YOU", "THE", "NOT", "HOLD", "APE", "ALL", "TLDR", "LFG", "SEC", "FUCK", "MSM", "FOMO", "BABY", "HALT", "STFU", "IRA", "SELL", "WISH", "FROM", "BLUE", "AND", "ARE", "USD", "FOR", "WTF", "WHAT", "PSA", "CEO", "CNBC", "EOW"];
+const tickers_blacklist = ["WSB", "HODL", "APES", "BUY", "YOLO", "FUD", "YOU", "THE", "NOT", "HOLD", "APE", "ALL", "TLDR", "LFG", "SEC", "FUCK", "MSM", "FOMO", "BABY", "HALT", "STFU", "IRA", "SELL", "WISH", "FROM", "BLUE", "AND", "ARE", "USD", "FOR", "WTF", "WHAT", "PSA", "CEO", "CNBC", "EOW", "CFO", "ETF", "BBC", "THIS", "NYSE", "KMS"];
 
 let tickers_mentions = new Map();
 let tickers_mentions_prev = new Map();
@@ -22,9 +22,11 @@ async function getApiData(url) {
 
     var data = await response.json();
     console.log("Unix timestamp of last post: " + data.data.slice(-1)[0].created_utc);
+    console.log(data.data.length);
+    console.log(data);
     rankTickers(data);
     updatePercentage(data.data.slice(-1)[0].created_utc);
-    if (data.data.length === 250) {
+    if (data.data.length >= 249) {
         getApiData(api_url(data.data.slice(-1)[0].created_utc + 1, before));
     } else {
         hideLoader();
@@ -52,7 +54,10 @@ function rankTickers(data) {
                 }
             }
         }
+        
     }
+    console.log(tickers_mentions_prev);
+    console.log(tickers_mentions);
 }
 
 function updatePercentage(current_timestamp) {
@@ -70,8 +75,8 @@ function showRankings() {
         `<tr>
           <th>Rank</th>
           <th>Ticker</th>
-          <th>Mentions</th>
-          <th>% change</th>
+          <th>Mentions in r/wallstreetbets posts in past 24 hrs</th>
+          <th>% change in mentions from previous 24 hrs</th>
          </tr>`;
 
     let rank = 1;
